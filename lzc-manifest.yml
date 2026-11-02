@@ -1,0 +1,43 @@
+application:
+  subdomain: actualbudget
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://actualbudget:5006/
+
+services:
+  actualbudget:
+    # upstream: actualbudget/actual-server:26.11.0
+    image: docker.1ms.run/actualbudget/actual-server:26.11.0
+    environment:
+      # Default is already 'password', but state it explicitly: with this method
+      # the first visitor sets the server password, so the UI is never open.
+      - ACTUAL_LOGIN_METHOD=password
+      - ACTUAL_DATA_DIR=/data
+      - ACTUAL_PORT=5006
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/data:/data
+
+usage: |
+  Actual Budget 是本地优先的记账工具，用信封预算法管理收支。
+
+  使用方法：
+  1. 打开应用，**首次访问会让你设置服务器密码**，自己设一个记牢（包内没有内置口令）。
+  2. 设置完成后创建一个"账本"（File），
+  3. 添加账户，然后录入或导入交易记录；可以按月给各类目分配预算（信封法）。
+  4. 在"报表"里能看到收支趋势、分类占比和净资产变化。
+
+  数据与安全：
+  - 账本数据存在 /lzcapp/var/data，卸载应用会一并删除，请定期备份
+    （也可以在应用内导出账本文件留档）。
+  - 服务器密码由你首次访问时设置，不存在内置弱口令；默认登录方式就是账号密码。
+  - 应用经懒猫入口鉴权访问。
+
+  说明：
+  - 单容器部署，内置数据库，无需额外组件。
+  - 官方同步服务与银行直连（GoCardless 等）需要额外的外部凭据，本包未配置，
+    因此请手动录入或导入 CSV 对账；本地记账与同步到本服务器不受影响。
+  - 未做真机验证：设置密码、创建账本、录入交易以及重启后持久化均未在设备上实测。

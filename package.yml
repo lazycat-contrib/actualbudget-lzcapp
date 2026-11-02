@@ -1,0 +1,18 @@
+package: community.lazycat.app.actualbudget
+name: Actual Budget
+version: 0.0.0
+description: "Local-first budgeting: envelope-style money management that syncs to your own server."
+min_os_version: "1.5.0"
+homepage: https://actualbudget.org/
+author: Actual Budget
+license: MIT
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Actual Budget
+    description: "本地优先的记账工具：信封预算法管理收支，数据同步到自己的服务器。"
+  en:
+    name: Actual Budget
+    description: "Local-first budgeting: envelope-style money management that syncs to your own server."
